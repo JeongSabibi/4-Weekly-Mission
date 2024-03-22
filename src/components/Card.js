@@ -4,7 +4,7 @@ import { formatDate, getTimeAgo } from '../utils/utils';
 
 import styled from 'styled-components';
 
-const CardImageItem = styled.img`
+const Image = styled.img`
   width: 34rem;
   object-fit: cover;
 
@@ -13,7 +13,7 @@ const CardImageItem = styled.img`
   }
 `;
 
-const CardContainer = styled.div`
+const Container = styled.div`
   width: 34rem;
   height: 33.4rem;
   box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.08);
@@ -29,13 +29,13 @@ const CardContainer = styled.div`
     border: 2px solid #6d6afe;
     transition: all 0.2s linear;
 
-    ${CardImageItem} {
+    ${Image} {
       transform: scale(1.3);
     }
   }
 `;
 
-const CardImage = styled.div`
+const ImageBox = styled.div`
   display: flex;
   justify-content: center;
   width: 34rem;
@@ -48,7 +48,7 @@ const CardImage = styled.div`
   }
 `;
 
-const CardContents = styled.div`
+const ContentBox = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
@@ -56,12 +56,12 @@ const CardContents = styled.div`
   font-weight: 400;
 `;
 
-const CardDiffTime = styled.div`
+const DiffTime = styled.div`
   color: #666;
   font-size: 1.3rem;
 `;
 
-const CardDescription = styled.div`
+const Description = styled.div`
   color: #000;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -71,7 +71,7 @@ const CardDescription = styled.div`
   height: 4.9rem;
 `;
 
-const CardCreatedTime = styled.div`
+const CreatedTime = styled.div`
   color: #333;
   font-size: 1.4rem;
 `;
@@ -85,18 +85,18 @@ const Card = ({ link }) => {
   const folderId = link?.folder_id;
 
   return (
-    <CardContainer>
+    <Container>
       <a href={url} target="_blank" rel="noreferrer">
-        <CardImage>
-          <CardImageItem src={imageSource ? imageSource : noImage} alt={title} />
-        </CardImage>
-        <CardContents>
-          <CardDiffTime>{getTimeAgo(createdAt)}</CardDiffTime>
-          <CardDescription>{description}</CardDescription>
-          <CardCreatedTime>{formatDate(createdAt)}</CardCreatedTime>
-        </CardContents>
+        <ImageBox>
+          <Image src={imageSource ? imageSource : noImage} alt={title} />
+        </ImageBox>
+        <ContentBox>
+          <DiffTime>{getTimeAgo(createdAt)}</DiffTime>
+          <Description>{description}</Description>
+          <CreatedTime>{formatDate(createdAt)}</CreatedTime>
+        </ContentBox>
       </a>
-    </CardContainer>
+    </Container>
   );
 };
 
