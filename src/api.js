@@ -1,5 +1,5 @@
 const BASE_URL = 'https://bootcamp-api.codeit.kr/api';
-export const SAMPLE_ID = '1';
+export const SAMPLE_ID = 1;
 
 export const getUser = async () => {
   const response = await fetch(`${BASE_URL}/sample/user`);
