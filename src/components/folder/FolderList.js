@@ -116,7 +116,7 @@ const Button = styled.button`
 
 const FolderList = ({ folderList }) => {
   const [links, setLinks] = useState(null);
-  const [item, setItem] = useState({ id: 'all', name: '전체' });
+  const [folderFilter, setFolderFilter] = useState({ id: 'all', name: '전체' });
 
   const handleLoadAllFolderLink = async () => {
     const { data, error } = await getAllFolderLink();
@@ -124,11 +124,13 @@ const FolderList = ({ folderList }) => {
       return alert(error);
     }
     setLinks(data);
-    setItem({ id: 'all', name: '전체' });
+    setFolderFilter({ id: 'all', name: '전체' });
   };
 
   const handleLoadFolderLink = async () => {
-    const { data, error } = await getFolderLinkData(item.id === 'all' ? '' : `${item.id}`);
+    const { data, error } = await getFolderLinkData(
+      folderFilter.id === 'all' ? '' : `${folderFilter.id}`,
+    );
 
     if (error) {
       return alert(error);
@@ -138,52 +140,52 @@ const FolderList = ({ folderList }) => {
 
   useEffect(() => {
     handleLoadFolderLink();
-  }, [item]);
+  }, [folderFilter]);
+
+  if (!links) {
+    return <MainContainerEmpty>저장된 링크가 없습니다.</MainContainerEmpty>;
+  }
 
   return (
     <>
-      {links ? (
-        <MainContainer>
-          <FolderContainer>
-            {folderList ? (
-              <Folder>
-                <FolderTab>
-                  <Tab onClick={handleLoadAllFolderLink}>전체</Tab>
-                  {folderList.map((item) => (
-                    <FolderTabItem folder={item} key={item.id} setItem={setItem} />
-                  ))}
-                </FolderTab>
-                <FolderAddButton>
-                  폴더 추가
-                  <img width="16" height="16" src={add} alt="folder add button" />
-                </FolderAddButton>
-              </Folder>
-            ) : null}
-            <OptionContainer>
-              <FolderName>{item.name}</FolderName>
-              <Options>
-                <Button>
-                  <OptionIcon src={share} alt="공유 아이콘" />
-                  공유
-                </Button>
-                <Button>
-                  <OptionIcon src={pen} alt="이름 변경 아이콘" />
-                  이름 변경
-                </Button>
-                <Button>
-                  <OptionIcon src={deleteicon} alt="삭제 아이콘" />
-                  삭제
-                </Button>
-              </Options>
-            </OptionContainer>
-          </FolderContainer>
-          {links.map((link) => (
-            <Card link={link} key={link.id} />
-          ))}
-        </MainContainer>
-      ) : (
-        <MainContainerEmpty>저장된 링크가 없습니다.</MainContainerEmpty>
-      )}
+      <MainContainer>
+        <FolderContainer>
+          {folderList && (
+            <Folder>
+              <FolderTab>
+                <Tab onClick={handleLoadAllFolderLink}>전체</Tab>
+                {folderList.map((item) => (
+                  <FolderTabItem folder={item} key={item.id} setFolderFilter={setFolderFilter} />
+                ))}
+              </FolderTab>
+              <FolderAddButton>
+                폴더 추가
+                <img width="16" height="16" src={add} alt="folder add button" />
+              </FolderAddButton>
+            </Folder>
+          )}
+          <OptionContainer>
+            <FolderName>{folderFilter.name}</FolderName>
+            <Options>
+              <Button>
+                <OptionIcon src={share} alt="공유 아이콘" />
+                공유
+              </Button>
+              <Button>
+                <OptionIcon src={pen} alt="이름 변경 아이콘" />
+                이름 변경
+              </Button>
+              <Button>
+                <OptionIcon src={deleteicon} alt="삭제 아이콘" />
+                삭제
+              </Button>
+            </Options>
+          </OptionContainer>
+        </FolderContainer>
+        {links.map((link) => (
+          <Card link={link} key={link.id} />
+        ))}
+      </MainContainer>
     </>
   );
 };

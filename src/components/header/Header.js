@@ -67,7 +67,7 @@ const ProfileEmail = styled.p`
   }
 `;
 
-const Login = styled.a`
+const LoginButton = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,7 +105,7 @@ const Header = ({ user, isSticky = true }) => {
             <ProfileEmail>{user.email}</ProfileEmail>
           </ProfileContainer>
         ) : (
-          <Login href="/">로그인</Login>
+          <LoginButton href="/">로그인</LoginButton>
         )}
       </Nav>
     </HeaderContainer>
