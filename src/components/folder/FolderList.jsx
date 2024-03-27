@@ -7,6 +7,9 @@ import share from '../../images/share.svg';
 import pen from '../../images/pen.svg';
 import deleteicon from '../../images/delete.svg';
 
+import Modal from '../modal/Modal';
+import useModal from '../../hooks/useModal';
+
 import { getAllFolderLink, getFolderLinkData } from '../../api';
 import { React, useEffect, useState } from 'react';
 
@@ -117,6 +120,7 @@ const Button = styled.button`
 const FolderList = ({ folderList }) => {
   const [links, setLinks] = useState(null);
   const [folderFilter, setFolderFilter] = useState({ id: 'all', name: '전체' });
+  const { openModal, modalFunc, handleModalOpen, handleModalClose } = useModal();
 
   const handleLoadAllFolderLink = async () => {
     const { data, error } = await getAllFolderLink();
@@ -138,6 +142,40 @@ const FolderList = ({ folderList }) => {
     setLinks(data);
   };
 
+  const handleAddButtonClick = () => {
+    handleModalOpen({
+      title: '폴더 추가',
+      placeholder: '내용 입력',
+      buttonColor: 'blue',
+      buttonTitle: '추가하기',
+    });
+  };
+
+  const handleShareButtonClick = () => {
+    handleModalOpen({
+      title: '폴더 공유',
+      subTitle: folderFilter.name,
+    });
+  };
+
+  const handleUpdateButtonClick = () => {
+    handleModalOpen({
+      title: '폴더 이름 변경',
+      placeholder: folderFilter.name,
+      buttonColor: 'blue',
+      buttonTitle: '변경하기',
+    });
+  };
+
+  const handleDeleteButtonClick = () => {
+    handleModalOpen({
+      title: '폴더 삭제',
+      subTitle: folderFilter.name,
+      buttonColor: 'red',
+      buttonTitle: '삭제하기',
+    });
+  };
+
   useEffect(() => {
     handleLoadFolderLink();
   }, [folderFilter]);
@@ -148,6 +186,16 @@ const FolderList = ({ folderList }) => {
 
   return (
     <>
+      {openModal && modalFunc && (
+        <Modal
+          title={modalFunc.title}
+          subTitle={modalFunc.subTitle}
+          placeholder={modalFunc.placeholder}
+          buttonColor={modalFunc.buttonColor}
+          buttonTitle={modalFunc.buttonTitle}
+          onClick={handleModalClose}
+        />
+      )}
       <MainContainer>
         <FolderContainer>
           {folderList && (
@@ -158,7 +206,7 @@ const FolderList = ({ folderList }) => {
                   <FolderTabItem folder={item} key={item.id} setFolderFilter={setFolderFilter} />
                 ))}
               </FolderTab>
-              <FolderAddButton>
+              <FolderAddButton onClick={handleAddButtonClick}>
                 폴더 추가
                 <img width="16" height="16" src={add} alt="folder add button" />
               </FolderAddButton>
@@ -167,15 +215,15 @@ const FolderList = ({ folderList }) => {
           <OptionContainer>
             <FolderName>{folderFilter.name}</FolderName>
             <Options>
-              <Button>
+              <Button onClick={handleShareButtonClick}>
                 <OptionIcon src={share} alt="공유 아이콘" />
                 공유
               </Button>
-              <Button>
+              <Button onClick={handleUpdateButtonClick}>
                 <OptionIcon src={pen} alt="이름 변경 아이콘" />
                 이름 변경
               </Button>
-              <Button>
+              <Button onClick={handleDeleteButtonClick}>
                 <OptionIcon src={deleteicon} alt="삭제 아이콘" />
                 삭제
               </Button>
